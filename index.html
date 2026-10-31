@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>HUMN — Turn Apple Health into one useful next step</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="HUMN brings your Apple Health signals together — movement, daylight, winding down and focused time — and helps you choose one useful next step. Health data is computed on your device."/>
+<meta name="theme-color" content="#0a0908"/>
+<meta name="color-scheme" content="dark"/>
+
+<!-- Open Graph / Twitter card — for link previews when the URL is
+     shared on iMessage, Slack, Twitter/X, LinkedIn, etc. Same promise
+     as the page H1 so the preview matches what the user lands on. -->
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="HUMN — Turn Apple Health into one useful next step"/>
+<meta property="og:description" content="Movement, daylight, winding down and focused time. HUMN brings your Apple Health signals together and helps you choose what to do next. Health data is computed on your device."/>
+<meta property="og:url" content="https://mifunekinski.github.io/HUMN/"/>
+<meta property="og:site_name" content="HUMN"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="HUMN — Turn Apple Health into one useful next step"/>
+<meta name="twitter:description" content="Movement, daylight, winding down and focused time. HUMN brings your Apple Health signals together and helps you choose what to do next."/>
+
+<!-- Favicon — inline SVG of the H mark on the ember background; no
+     separate icon asset needed. Modern browsers (Safari, Chrome,
+     Firefox, Edge) all support SVG favicons. -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'><defs><radialGradient id='b' cx='50%25' cy='40%25' r='68%25'><stop offset='0%25' stop-color='%23332518'/><stop offset='100%25' stop-color='%231a0f08'/></radialGradient><radialGradient id='g' cx='50%25' cy='50%25' r='50%25'><stop offset='0%25' stop-color='%23fce5b5'/><stop offset='55%25' stop-color='%23eaa052'/><stop offset='100%25' stop-color='rgba(0,0,0,0)'/></radialGradient></defs><rect width='1024' height='1024' fill='url(%23b)'/><ellipse cx='512' cy='512' rx='370' ry='185' fill='url(%23g)'/><rect x='251' y='218' width='116' height='588' fill='%23efece7'/><rect x='657' y='218' width='116' height='588' fill='%23efece7'/><rect x='365' y='459' width='294' height='106' fill='%23fbe2a4'/></svg>"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,1,400;9..144,1,500;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --ink-0:#0a0908;
+  --ink-1:oklch(0.13 0.014 50);
+  --ink-2:oklch(0.16 0.022 50);
+  --ink-3:oklch(0.20 0.028 48);
+  --hair:oklch(0.30 0.014 50);
+  --hair-hi:oklch(0.42 0.024 50);
+
+  --bone:#efece7;
+  --bone-dim:#cfcac1;
+  --mute:#8a857c;
+  --faint:#6f6a62;
+  --ghost:#4a463f;
+
+  --ember-hi:oklch(0.92 0.13 78);
+  --ember:   oklch(0.78 0.17 55);
+  --ember-lo:oklch(0.55 0.16 38);
+  --campfire-glow:oklch(0.85 0.20 65 / 0.35);
+
+  --amber:   oklch(0.72 0.16 65);
+  --amber-hi:oklch(0.85 0.15 80);
+
+  --mono:'JetBrains Mono', ui-monospace, monospace;
+  --sans:'Inter', system-ui, -apple-system, sans-serif;
+  --disp:'Space Grotesk', system-ui, sans-serif;
+  --prose:'Fraunces', 'Iowan Old Style', Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { margin:0; padding:0; background:var(--ink-0); color:var(--bone); font-family:var(--sans); -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+a { color: var(--ember-hi); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--ember-hi); outline-offset: 3px; }
+
+::selection { background: oklch(0.78 0.17 55 / 0.30); color: var(--bone); }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--ink-0); }
+::-webkit-scrollbar-thumb { background: var(--hair); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--hair-hi); }
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 200;
+  background: var(--ember); color: #0a0908; padding: 12px 18px;
+  font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+.skip-link:focus { left: 12px; top: 12px; }
+
+/* ─── Animations ─── */
+@keyframes m-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Top nav ─── */
+
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 36px;
+  background: oklch(0.10 0.014 50 / 0.55);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border-bottom: 1px solid var(--hair);
+}
+.nav-brand { display: flex; align-items: center; gap: 14px; min-height: 44px; }
+.nav-brand .h-mark { width: 28px; height: 28px; border-radius: 6px; }
+.nav-brand .wordmark { font-family: var(--disp); font-size: 14px; font-weight: 600; letter-spacing: 4px; color: var(--bone); }
+.nav-links { display: flex; gap: 26px; align-items: center; }
+.nav-links a { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 1.6px; color: var(--bone-dim); text-transform: uppercase; min-height: 44px; display: inline-flex; align-items: center; }
+.nav-links a:hover { color: var(--bone); text-decoration: none; }
+.nav-cta {
+  font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 1.6px;
+  padding: 0 16px; border: 1px solid var(--ember); color: var(--ember);
+  text-transform: uppercase; background: transparent; min-height: 44px;
+  display: inline-flex; align-items: center;
+}
+.nav-cta:hover { background: var(--ember); color: #0a0908; text-decoration: none; }
+
+@media (max-width: 720px) {
+  .nav { padding: 12px 20px; }
+  .nav-links a:not(.nav-cta) { display: none; }
+  .hero-foot { font-size: 12px; letter-spacing: 1px; }
+}
+
+/* ─── Hero ─── */
+
+.hero {
+  min-height: 100vh; padding: 140px 36px 100px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; position: relative;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 100%, var(--campfire-glow), transparent 65%),
+    radial-gradient(ellipse 35% 30% at 50% 100%, oklch(0.55 0.20 50 / 0.30), transparent 70%),
+    var(--ink-0);
+}
+.hero-eyebrow {
+  font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 2.6px;
+  color: var(--ember); text-transform: uppercase; margin-bottom: 30px;
+  animation: m-fade-up 0.6s ease-out;
+}
+.hero-h1 {
+  font-family: var(--disp); font-size: clamp(40px, 8vw, 104px); font-weight: 600;
+  letter-spacing: -0.035em; line-height: 1.0; color: var(--bone); margin: 0;
+  max-width: 1180px;
+  animation: m-fade-up 0.7s 0.1s ease-out backwards;
+}
+.hero-lede {
+  font-family: var(--sans); font-size: clamp(18px, 2vw, 22px);
+  color: var(--bone-dim); line-height: 1.55; max-width: 760px;
+  margin: 34px 0 0;
+  animation: m-fade-up 0.7s 0.2s ease-out backwards;
+}
+.hero-lede .prose-em {
+  font-family: var(--prose); font-style: italic; font-weight: 500;
+  color: var(--ember-hi); letter-spacing: -0.01em;
+}
+.hero-cta-row {
+  display: flex; gap: 14px; margin-top: 46px; flex-wrap: wrap; justify-content: center;
+  animation: m-fade-up 0.7s 0.3s ease-out backwards;
+}
+.btn-primary, .btn-secondary {
+  font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: 1.8px;
+  padding: 16px 28px; cursor: pointer; text-transform: uppercase;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  text-decoration: none; min-height: 48px;
+  border: 1px solid var(--ember);
+}
+.btn-primary { background: var(--ember); color: #0a0908; }
+.btn-primary:hover { background: var(--ember-hi); border-color: var(--ember-hi); text-decoration: none; }
+.btn-secondary { background: transparent; color: var(--ember); }
+.btn-secondary:hover { background: oklch(0.78 0.17 55 / 0.10); text-decoration: none; }
+.btn-arrow { font-size: 14px; }
+
+.hero-foot {
+  margin-top: 56px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 2px; color: var(--bone-dim);
+  display: flex; gap: 22px; flex-wrap: wrap; justify-content: center;
+  max-width: min(760px, 100%);
+  animation: m-fade-up 0.7s 0.4s ease-out backwards;
+}
+.hero-foot > span { white-space: normal; overflow-wrap: anywhere; max-width: 100%; }
+.hero-foot .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ember); display: inline-block; margin-right: 6px; box-shadow: 0 0 5px var(--ember); vertical-align: middle; }
+
+/* ─── Section chrome ─── */
+
+section.bay { padding: 110px 36px; max-width: 1180px; margin: 0 auto; }
+section.bay-narrow { padding: 110px 36px; max-width: 860px; margin: 0 auto; }
+
+.section-eyebrow {
+  font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 2.6px;
+  color: var(--ember); text-transform: uppercase; margin-bottom: 22px;
+}
+.section-h2 {
+  font-family: var(--disp); font-size: clamp(32px, 4.4vw, 56px); font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.06; color: var(--bone); margin: 0 0 26px;
+}
+.section-h2 .prose-em {
+  font-family: var(--prose); font-style: italic; font-weight: 500;
+  color: var(--ember-hi); letter-spacing: -0.02em;
+}
+.section-lede {
+  font-family: var(--sans); font-size: 19px; color: var(--bone-dim);
+  line-height: 1.6; max-width: 720px; margin: 0 0 48px;
+}
+
+.divider-rule { height: 1px; background: var(--hair); max-width: 1180px; margin-left: auto; margin-right: auto; }
+
+/* ─── Benefits ─── */
+
+#how { background: var(--ink-0); }
+.benefits-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.benefit {
+  background: var(--ink-1); border: 1px solid var(--hair); border-top: 2px solid var(--ember);
+  padding: 32px 26px; display: flex; flex-direction: column;
+}
+.benefit .num {
+  font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 2.4px;
+  color: var(--ember); margin-bottom: 18px;
+}
+.benefit h3 {
+  font-family: var(--disp); font-size: 26px; font-weight: 600; letter-spacing: -0.01em;
+  line-height: 1.15; color: var(--bone); margin: 0 0 14px;
+}
+.benefit p {
+  font-family: var(--sans); font-size: 15px; color: var(--bone-dim);
+  line-height: 1.6; margin: 0;
+}
+
+@media (max-width: 880px) {
+  .benefits-grid { grid-template-columns: 1fr; gap: 16px; }
+}
+
+/* ─── Requirements ─── */
+
+#requirements { background: var(--ink-1); }
+.req-list { border-top: 1px solid var(--hair); margin-top: 8px; }
+.req-row {
+  display: grid; grid-template-columns: 240px 1fr; gap: 28px;
+  padding: 26px 0; border-bottom: 1px solid var(--hair); align-items: baseline;
+}
+.req-row .k {
+  font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: 2px;
+  color: var(--ember); text-transform: uppercase;
+}
+.req-row .v { font-family: var(--sans); font-size: 17px; color: var(--bone); line-height: 1.55; }
+.req-row .v .dim { color: var(--bone-dim); }
+
+@media (max-width: 720px) {
+  .req-row { grid-template-columns: 1fr; gap: 8px; }
+}
+
+/* ─── Privacy ─── */
+
+#privacy { background: var(--ink-0); }
+.privacy-blocks { display: flex; flex-direction: column; gap: 16px; max-width: 860px; }
+.privacy-blocks .block {
+  background: var(--ink-2); border: 1px solid var(--hair); border-left: 3px solid var(--ember);
+  padding: 24px 28px;
+}
+.privacy-blocks .block .k {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 2px; color: var(--ember);
+  font-weight: 700; margin-bottom: 10px; text-transform: uppercase;
+}
+.privacy-blocks .block .v {
+  font-family: var(--sans); font-size: 16px; color: var(--bone); line-height: 1.6;
+}
+.privacy-blocks .block .v .prose-em {
+  font-family: var(--prose); font-style: italic; font-weight: 500; color: var(--ember-hi);
+}
+.privacy-more { margin-top: 28px; font-family: var(--sans); font-size: 16px; color: var(--bone-dim); }
+
+/* ─── Support ─── */
+
+#support {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 100%, var(--campfire-glow), transparent 65%),
+    var(--ink-1);
+  text-align: center;
+}
+#support .section-h2 { margin-left: auto; margin-right: auto; }
+#support .section-lede { margin-left: auto; margin-right: auto; }
+.support-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* ─── Footer ─── */
+
+footer.foot {
+  border-top: 1px solid var(--hair);
+  padding: 56px 36px 36px;
+  display: flex; flex-direction: column; gap: 28px;
+  max-width: 1180px; margin: 0 auto;
+}
+.foot-top {
+  display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 32px;
+}
+.foot-brand .wm {
+  font-family: var(--disp); font-size: 16px; font-weight: 600; letter-spacing: 5px; color: var(--bone);
+  margin-bottom: 14px;
+}
+.foot-brand .prose-em {
+  font-family: var(--prose); font-style: italic; font-size: 18px; color: var(--ember-hi); line-height: 1.3;
+  margin-bottom: 8px;
+}
+.foot-brand .sub { font-family: var(--mono); font-size: 11px; letter-spacing: 1.6px; color: var(--faint); }
+
+.foot-col h4 {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 2px; color: var(--ember);
+  text-transform: uppercase; font-weight: 700; margin: 0 0 12px;
+}
+.foot-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.foot-col a { font-family: var(--sans); font-size: 14px; color: var(--bone-dim); }
+.foot-col a:hover { color: var(--bone); text-decoration: none; }
+
+.foot-bottom {
+  display: flex; justify-content: space-between; padding-top: 24px;
+  border-top: 1px solid var(--hair);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 1.6px; color: var(--faint);
+  text-transform: uppercase; flex-wrap: wrap; gap: 14px;
+}
+
+@media (max-width: 720px) {
+  .foot-top { grid-template-columns: 1fr 1fr; gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- NAV                                                              -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<nav class="nav" aria-label="Primary">
+  <a href="#top" class="nav-brand" style="color: var(--bone); text-decoration: none;">
+    <svg class="h-mark" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false">
+      <defs>
+        <radialGradient id="nav-h-bg" cx="50%" cy="40%" r="68%">
+          <stop offset="0%" stop-color="oklch(0.20 0.06 50)"/>
+          <stop offset="100%" stop-color="oklch(0.10 0.04 45)"/>
+        </radialGradient>
+        <radialGradient id="nav-h-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="oklch(0.92 0.12 75 / 0.95)"/>
+          <stop offset="55%" stop-color="oklch(0.78 0.18 65 / 0.85)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+        </radialGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="url(#nav-h-bg)"/>
+      <ellipse cx="512" cy="512" rx="370" ry="185" fill="url(#nav-h-glow)"/>
+      <rect x="251" y="218" width="116" height="588" fill="#efece7"/>
+      <rect x="657" y="218" width="116" height="588" fill="#efece7"/>
+      <rect x="365" y="459" width="294" height="106" fill="oklch(0.96 0.06 80)"/>
+    </svg>
+    <span class="wordmark">HUMN</span>
+  </a>
+  <div class="nav-links">
+    <a href="#how">What it does</a>
+    <a href="#requirements">Requirements</a>
+    <a href="#privacy">Privacy</a>
+    <a href="https://apps.apple.com/us/app/humn-ancestral-reset/id6763772001" class="nav-cta">Download</a>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- HERO                                                             -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<header class="hero" id="top">
+  <div class="hero-eyebrow">·  iPhone · Apple Health  ·</div>
+  <h1 class="hero-h1">Turn Apple Health into one useful next step.</h1>
+  <p class="hero-lede">
+    Movement, daylight, winding down and focused time. HUMN brings your daily
+    signals together and helps you choose <span class="prose-em">what to do next</span>.
+  </p>
+  <div class="hero-cta-row">
+    <a href="https://apps.apple.com/us/app/humn-ancestral-reset/id6763772001" class="btn-primary" aria-label="Download HUMN on the App Store">Download on the App Store <span class="btn-arrow">→</span></a>
+    <a href="#how" class="btn-secondary">See what it does</a>
+  </div>
+  <div class="hero-foot">
+    <span><span class="dot"></span>Health data computed on your device</span>
+    <span>Optional sync through your own iCloud</span>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- BENEFITS                                                         -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="bay" id="how">
+  <div class="section-eyebrow">01 · What it does</div>
+  <h2 class="section-h2">One reading in, <span class="prose-em">one next step out.</span></h2>
+  <p class="section-lede">
+    HUMN reads the health data you already have and turns it into a small,
+    concrete action for today &mdash; then shows you honest progress, including
+    on the days you miss.
+  </p>
+
+  <div class="benefits-grid">
+    <div class="benefit">
+      <div class="num">01</div>
+      <h3>Know what to do next.</h3>
+      <p>
+        Today shows one useful action drawn from your own readings &mdash; a walk,
+        some daylight, winding down, or time for focused work. Choose it, and HUMN
+        opens the setup. You decide whether to start.
+      </p>
+    </div>
+    <div class="benefit">
+      <div class="num">02</div>
+      <h3>A missed day isn&rsquo;t a reset.</h3>
+      <p>
+        Missing readings are left out of your score rather than counted as zero.
+        Your history is preserved, and a hard day is information plus a next step
+        &mdash; not a reason to start over.
+      </p>
+    </div>
+    <div class="benefit">
+      <div class="num">03</div>
+      <h3>Your data, under your control.</h3>
+      <p>
+        Health values are read from Apple Health and computed on your device.
+        Optional sync uses your own private iCloud. Export or delete your data
+        whenever you want.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider-rule"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- REQUIREMENTS                                                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="bay" id="requirements">
+  <div class="section-eyebrow">02 · What you need</div>
+  <h2 class="section-h2">Built for the phone in your pocket.</h2>
+
+  <div class="req-list">
+    <div class="req-row">
+      <span class="k">iPhone</span>
+      <span class="v">Required. HUMN runs on iPhone.</span>
+    </div>
+    <div class="req-row">
+      <span class="k">Apple Health</span>
+      <span class="v">Required for your signals. HUMN reads only what you grant, and computes your score on the device.</span>
+    </div>
+    <div class="req-row">
+      <span class="k">Apple Watch</span>
+      <span class="v">Optional. <span class="dim">Phone-only works with fewer signals &mdash; the app adapts to what it can read.</span></span>
+    </div>
+  </div>
+</section>
+
+<div class="divider-rule"></div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- PRIVACY                                                          -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="bay" id="privacy">
+  <div class="section-eyebrow">03 · Privacy, plainly</div>
+  <h2 class="section-h2">Your biology stays <span class="prose-em">yours.</span></h2>
+  <p class="section-lede">
+    No ads. No selling data. Here is exactly what HUMN does with your information.
+  </p>
+
+  <div class="privacy-blocks">
+    <div class="block">
+      <div class="k">On your device</div>
+      <div class="v">
+        Health values are read from Apple Health and computed on your iPhone.
+        Your score, history and progress are derived locally.
+      </div>
+    </div>
+    <div class="block">
+      <div class="k">Optional sync</div>
+      <div class="v">
+        If you turn on sync, your history, tasks and task photos are stored in
+        your own private iCloud. HUMN does not run a server that holds your
+        health values.
+      </div>
+    </div>
+    <div class="block">
+      <div class="k">No ads, no selling</div>
+      <div class="v">
+        HUMN shows no advertising and does not sell your data. Crash diagnostics
+        are scrubbed of health values. You can export or delete your data at any
+        time.
+      </div>
+    </div>
+  </div>
+
+  <p class="privacy-more">
+    Read the full <a href="privacy.html">privacy policy</a>.
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- SUPPORT                                                          -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section class="bay" id="support">
+  <div class="section-eyebrow">04 · Support</div>
+  <h2 class="section-h2">Something not working?</h2>
+  <p class="section-lede">
+    Get help with missing readings, the first week of calibration, or exporting
+    and deleting your data.
+  </p>
+  <div class="support-actions">
+    <a href="support.html" class="btn-primary">Visit support</a>
+    <a href="https://apps.apple.com/us/app/humn-ancestral-reset/id6763772001" class="btn-secondary" aria-label="Download HUMN on the App Store">Download on the App Store</a>
+  </div>
+</section>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                           -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<footer class="foot">
+  <div class="foot-top">
+    <div class="foot-brand">
+      <div class="wm">H · U · M · N</div>
+      <div class="prose-em">Turn Apple Health into<br/>one useful next step.</div>
+      <div class="sub" style="margin-top: 14px;">SHIPPING iOS · IPHONE · APPLE HEALTH</div>
+    </div>
+    <div class="foot-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#how">What it does</a></li>
+        <li><a href="#requirements">Requirements</a></li>
+        <li><a href="https://apps.apple.com/us/app/humn-ancestral-reset/id6763772001">Download on the App Store</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Trust</h4>
+      <ul>
+        <li><a href="privacy.html">Privacy policy</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span><span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--ember);box-shadow:0 0 5px var(--ember);margin-right:8px;vertical-align:middle"></span>HUMN · 2026 · MADE WITH WARMTH</span>
+    <span>com.humn.app</span>
+  </div>
+</footer>
+
+</body>
+</html>
