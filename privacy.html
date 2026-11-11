@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Privacy Policy — HUMN</title>
+<title>HUMN</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="How HUMN handles health information and app data." />
+<meta name="description" content="HUMN" />
 <meta name="theme-color" content="#0a0908" />
 <meta name="color-scheme" content="dark" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -342,23 +342,32 @@ footer.foot {
 
 <main id="main" class="legal-wrap">
 <article class="legal">
+<hr />
+<p>title: Privacy Policy — HUMN description: How HUMN handles health information and app data.</p>
+<hr />
 <h1>HUMN Privacy Policy</h1>
-<p><strong>Effective:</strong> April 25, 2026 <strong>Last updated:</strong> October 31, 2026</p>
+<p><strong>Effective:</strong> April 25, 2026 <strong>Last updated:</strong> November 11, 2026</p>
 <p>HUMN turns your Apple Health data into one useful next step and applies only the app restrictions you choose. The app is published by Chris Moore. Health values are read from Apple Health and scored on your iPhone.</p>
 <h2>1. Health values HUMN reads from Apple Health</h2>
 <p>HUMN reads the following Apple HealthKit types, and only after you grant explicit permission in iOS:</p>
-<ul><li>Time in Daylight</li><li>Step Count</li><li>Active Energy Burned</li><li>Apple Stand Hour</li><li>Heart Rate (for Max Output / high-intensity detection during workouts)</li><li>Heart Rate Variability (SDNN)</li><li>Sleep Analysis (in-bed / asleep stages)</li><li>Blood Glucose (when a CGM is paired)</li><li>Workout Type (for strength-session detection and workout rollups)</li><li>Cardio Fitness / VO₂ max</li><li>Mindful Session / Mindfulness (for focus-timer scoring)</li><li>Dietary Protein (for opt-in protein scoring)</li><li>Date of Birth (for age-based Max Output thresholds)</li><li>Biological Sex (for alcohol heavy-day thresholds)</li><li>Number of Alcoholic Beverages (when you log drinks)</li></ul>
-<p>HUMN requests HealthKit write permission only for raw values you create in HUMN: <code>NumberOfAlcoholicBeverages</code>, <code>DietaryProtein</code>, and <code>TimeInDaylight</code>. If you log drinks, tap a protein bolus, or finish an in-app sun-exposure timer, HUMN writes that raw sample to Apple Health so Apple Health stays your source of truth. HUMN does <strong>not</strong> write scores, baselines, Shield state, app selections, or any other derived value back to Apple Health.</p>
+<ul><li>Time in Daylight</li><li>Step Count</li><li>Active Energy Burned</li><li>Apple Stand Hour</li><li>Heart Rate (for Max Output / high-intensity detection during workouts)</li><li>Heart Rate Variability (SDNN)</li><li>Resting Heart Rate</li><li>Respiratory Rate and Sleeping Wrist Temperature (read only, for the sick-day check; never scored)</li><li>Apple Exercise Time</li><li>Sleep Analysis (in-bed / asleep stages)</li><li>Blood Glucose (when a CGM is paired)</li><li>Workout Type (for strength-session detection and workout rollups)</li><li>Cardio Fitness / VO₂ max</li><li>Mindful Session / Mindfulness (for focus-timer scoring)</li><li>Dietary Protein (for opt-in protein scoring)</li><li>Date of Birth (for age-based Max Output thresholds)</li><li>Biological Sex (for alcohol heavy-day thresholds)</li><li>Number of Alcoholic Beverages (when you log drinks)</li><li>Dietary Caffeine (when you log caffeine)</li><li>Body Fat Percentage, Lean Body Mass, Height and Body Mass (weight), for the body composition readings</li></ul>
+<p>HUMN requests HealthKit write permission only for raw values you create in HUMN: alcohol drink counts, protein grams, caffeine (mg), body fat percentage, lean body mass, weight, Mindful Minutes from a focus session you finish, and daylight minutes from an in-app sun timer you stop. If you start a goal workout on Apple Watch, HUMN also saves that workout to Apple Health. HUMN writes these raw samples so Apple Health stays your source of truth. HUMN does <strong>not</strong> write scores, baselines, Shield state, app selections, or any other derived value back to Apple Health.</p>
 <p>You can revoke any HealthKit permission at any time in iOS Settings → Privacy &amp; Security → Health → HUMN.</p>
 <h2>2. Where your data lives</h2>
 <ul><li><strong>On your device.</strong> Scores, histories, preferences, timer state, and cached</li></ul>
 <p>health-derived values are computed and stored on your iPhone. Your selections in Apple's Screen Time picker are represented by opaque tokens held by iOS; HUMN does not receive the specific apps, categories, or websites you chose.</p>
 <ul><li><strong>Apple Health.</strong> Source measurements stay in Apple Health under your</li></ul>
 <p>permission settings.</p>
-<ul><li><strong>Your own private iCloud (CloudKit).</strong> Optional sync stores HUMN history,</li></ul>
-<p>tasks, and task photos in your private CloudKit database. This is your iCloud account, governed by Apple's service and account protections. HUMN has no server of its own that holds this data, and sync is used only to move your own records between your own devices.</p>
+<ul><li><strong>Your own private iCloud (CloudKit).</strong> When you are signed in to iCloud on</li></ul>
+<p>your iPhone, HUMN saves your daily score history, your strength-workout claims, your tasks and task photos, and your Focus timer records to your private CloudKit database. This happens automatically and has no on/off switch in HUMN. If you are signed out of iCloud, these stay on your iPhone. This is your iCloud account, governed by Apple's service and account protections. HUMN has no server of its own that holds this data, HUMN's servers never receive your tasks, and the copy is used only to move and restore your own records on your own devices.</p>
+<ul><li><strong>Apple Home.</strong> HUMN asks for Apple Home access only if you tap "Choose from</li></ul>
+<p>Apple Home" to pick a smart plug. It switches only the plugs you choose, at the TV and coffee cutoff times you set. Nothing about your home leaves your iPhone except through Apple's HomeKit framework.</p>
+<ul><li><strong>Camera.</strong> HUMN uses the camera only when you scan a Nutrition Facts label</li></ul>
+<p>to read its protein grams. The scan runs on your iPhone. No photo is stored and no image leaves the device.</p>
 <ul><li><strong>Crash diagnostics.</strong> Limited JavaScript crash-location reporting is</li></ul>
 <p>described in section 4.</p>
+<ul><li><strong>Native crash and hang diagnostics.</strong> iOS gives HUMN its own crash, hang</li></ul>
+<p>and app-exit diagnostics through Apple's MetricKit. HUMN keeps the most recent ones on your iPhone only, never transmits them, and shares one only when you tap Share. They contain app and system details such as the app version, device model and code locations, not health values.</p>
 <h2>3. How your data is used</h2>
 <p>Health-derived information supports your scores, history, personal baselines, widgets, Focus timers, and the restrictions you choose. HUMN does <strong>not</strong> show ads, does <strong>not</strong> sell or rent your data, and does <strong>not</strong> send health values to third-party analytics. On-device diagnostic screens and exports can contain sensitive health information, so a screenshot or export you share discloses whatever it contains to the recipient you pick.</p>
 <h2>4. Services and diagnostics</h2>
